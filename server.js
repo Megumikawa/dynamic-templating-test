@@ -14,9 +14,6 @@ app.use(express.static('public'));
 // 1: in the home,list all the students who took the exam (list all the students)
 
 app.get("/", (req, res) => {
-  for(let i = 0;students.length; i++){
-    students[i].name = students[i].name.toUpperCase
-  }
     res.render('full-list.hbs', {students})
 });
 
@@ -27,7 +24,12 @@ app.get("/", (req, res) => {
 // 2: in the '/results' list all the students who passed the test and their score.
 // Also, students should be in descending order based on their score.
 app.get("/results", (req, res) => {
-  res.render('results.hbs', {students})
+  let filteredStudents = students.filter((eachStudent) => eachStudent.hasPased)
+
+  filteredStudents.sort((a, b) => {
+    return b.score - a.score
+  })
+  res.render('results.hbs', {filteredStudents})
 });
 
 app.listen(process.env.PORT, () =>
